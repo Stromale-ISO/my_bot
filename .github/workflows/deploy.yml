@@ -69,7 +69,10 @@ jobs:
 
     # Проверка подключения к БД
     - name: Test database connection
-      run: ssh roman@51.250.43.124 "docker exec bot-db-1 psql -U postgres -d telegram_bot -c '\dt'"
+      run: |
+        CONTAINER_NAME=$(ssh roman@51.250.43.124 "docker ps --filter 'name=my_bot-db' --format '{{.Names}}'")
+        ssh roman@51.250.43.124 "docker exec $CONTAINER_NAME psql -U postgres -d telegram_bot -c '\\dt'"
+
 
     # Тестирование работы бота
     - name: Test bot connectivity
