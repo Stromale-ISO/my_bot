@@ -38,6 +38,7 @@ jobs:
         echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/roman/my_bot/.env
         echo "DB_PORT=${{ secrets.DB_PORT }}" >> /home/roman/my_bot/.env
         echo "BOT_TOKEN=${{ secrets.BOT_TOKEN }}" >> /home/roman/my_bot/.env
+        echo "AUTHORIZED_USERS=${{ secrets.AUTHORIZED_USERS }}" >> /home/roman/my_bot/.env
         EOF
 
     
