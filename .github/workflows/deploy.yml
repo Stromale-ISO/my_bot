@@ -26,7 +26,7 @@ jobs:
       run: ssh-keyscan -H 51.250.43.124 >> ~/.ssh/known_hosts
 
     - name: Test SSH Connection
-      run: ssh -o StrictHostKeyChecking=no roman@158.160.138.251 "echo 'SSH Connection Successful!'"
+      run: ssh -o StrictHostKeyChecking=no roman@51.250.43.124 "echo 'SSH Connection Successful!'"
 
     # Перенос проекта на сервер
     - name: Copy project to server
