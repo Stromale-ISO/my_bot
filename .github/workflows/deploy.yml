@@ -28,6 +28,19 @@ jobs:
     - name: Test SSH Connection
       run: ssh -o StrictHostKeyChecking=no roman@51.250.43.124 "echo 'SSH Connection Successful!'"
 
+    # Генерация .env на сервере
+    - name: Generate .env on server
+      run: |
+        ssh roman@51.250.43.124 << 'EOF'
+        echo "DB_USER=${{ secrets.DB_USER }}" > /home/roman/my_bot/bot/.env
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/roman/my_bot/bot/.env
+        echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/roman/my_bot/bot/.env
+        echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/roman/my_bot/bot/.env
+        echo "DB_PORT=${{ secrets.DB_PORT }}" >> /home/roman/my_bot/bot/.env
+        echo "BOT_TOKEN=${{ secrets.BOT_TOKEN }}" >> /home/roman/my_bot/bot/.env
+        EOF
+
+    
     # Перенос проекта на сервер
     - name: Copy project to server
       run: |
@@ -40,7 +53,7 @@ jobs:
     # Тестирование синтаксиса Docker Compose
     - name: Lint Docker Compose file
       run: ssh roman@51.250.43.124 "docker compose -f /home/roman/my_bot/docker-compose.yml config"
-
+    
     # Деплой приложения
     - name: Deploy containers
       run: |
