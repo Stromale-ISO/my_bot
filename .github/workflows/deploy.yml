@@ -1,0 +1,67 @@
+name: Deploy and Test Bot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+
+    steps:
+    # Проверка репозитория
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Установка SSH
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    # Проверка подключения к серверу
+    - name: Add server to known_hosts
+      run: ssh-keyscan -H 51.250.43.124 >> ~/.ssh/known_hosts
+
+    - name: Test SSH Connection
+      run: ssh -o StrictHostKeyChecking=no roman@158.160.138.251 "echo 'SSH Connection Successful!'"
+
+    # Перенос проекта на сервер
+    - name: Copy project to server
+      run: |
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude='.git' --exclude='.github' ./ roman@51.250.43.124:/home/roman/my_bot/
+
+    # Проверка наличия файла .env
+    - name: Verify .env exists on server
+      run: ssh roman@51.250.43.124 "test -f /home/roman/my_bot/bot/.env && echo '.env found' || echo '.env missing'"
+
+    # Тестирование синтаксиса Docker Compose
+    - name: Lint Docker Compose file
+      run: ssh roman@51.250.43.124 "docker compose -f /home/roman/my_bot/docker-compose.yml config"
+
+    # Деплой приложения
+    - name: Deploy containers
+      run: |
+        ssh roman@51.250.43.124 << 'EOF'
+        cd /home/roman/my_bot
+        docker compose down
+        docker compose up --build -d
+        EOF
+
+    # Тесты после деплоя
+    - name: Verify containers are running
+      run: ssh roman@51.250.43.124 "docker ps --filter 'name=my_bot' --format 'table {{.Names}}\t{{.Status}}'"
+
+    # Проверка подключения к БД
+    - name: Test database connection
+      run: ssh roman@51.250.43.124 "docker exec bot-db-1 psql -U postgres -d telegram_bot -c '\dt'"
+
+    # Тестирование работы бота
+    - name: Test bot connectivity
+      run: ssh roman@51.250.43.124 "curl -s http://localhost:8000 || echo 'Bot is unreachable'"
+
+    # Очистка логов (по желанию)
+    - name: Cleanup old logs
+      run: ssh roman@51.250.43.124 "find /home/roman/my_bot/logs -type f -mtime +7 -exec rm -f {} \; || echo 'No logs to clean'"
