@@ -37,7 +37,7 @@ jobs:
 
     - name: Add secrets
       run: |
-        roman@62.109.8.139 << 'EOF'
+        ssh roman@62.109.8.139 << 'EOF'
         echo "DB_USER=${{secrets.DB_USER}}" > /home/roman/my_bot/.env
         echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/roman/my_bot/.env  
         echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/roman/my_bot/.env  
@@ -47,6 +47,6 @@ jobs:
         echo "AUTHORIZED_USERS=${{ secrets.AUTHORIZED_USERS }}" >> /home/roman/my_bot/.env  
         EOF
     
-    
+
     - name: Check data
       run: ssh roman@62.109.8.139 "cat /home/roman/my_bot/.env
