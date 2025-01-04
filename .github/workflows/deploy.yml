@@ -34,38 +34,43 @@ jobs:
       run: ssh roman@62.109.8.139 "echo CONNECTION COMPLETE"
 
 
-
-    - name: Add secrets
+    - name: Install services to server
       run: |
         ssh roman@62.109.8.139 << 'EOF'
-        echo "DB_USER=${{secrets.DB_USER}}" > /home/roman/my_bot/.env
-        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/roman/my_bot/.env  
-        echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/roman/my_bot/.env  
-        echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/roman/my_bot/.env  
-        echo "DB_PORT=${{ secrets.DB_PORT }}" >> /home/roman/my_bot/.env  
-        echo "BOT_TOKEN=${{ secrets.BOT_TOKEN }}" >> /home/roman/my_bot/.env  
-        echo "AUTHORIZED_USERS=${{ secrets.AUTHORIZED_USERS }}" >> /home/roman/my_bot/.env  
+        sudo apt update
+        sudo apt install -y rsync
+        EOF
+
+
+    - name: Add secrets to test
+      run: |
+        ssh roman@62.109.8.139 << 'EOF'
+        echo "DB_USER=${{secrets.DB_USER}}" > /home/roman/my_bot_test/.env
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/roman/my_bot_test/.env  
+        echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/roman/my_bot_test/.env  
+        echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/roman/my_bot_test/.env  
+        echo "DB_PORT=${{ secrets.DB_PORT }}" >> /home/roman/my_bot_test/.env  
+        echo "BOT_TOKEN=${{ secrets.BOT_TOKEN }}" >> /home/roman/my_bot_test/.env  
+        echo "AUTHORIZED_USERS=${{ secrets.AUTHORIZED_USERS }}" >> /home/roman/my_bot_test/.env  
         EOF
     
 
     - name: Check data
-      run: ssh roman@62.109.8.139 "cat /home/roman/my_bot/.env"
+      run: ssh roman@62.109.8.139 "cat /home/roman/my_bot_test/.env"
 
 
-    - name: Install services
-      run: |
-        sudo apt update
-        sudo apt install -y rsync
-
-
-    - name: Copy project to server
+    - name: Test copy project to server
       run: | 
         rsync -avz \
         --exclude='.git' --exclude='.github' \
         ./ \
-        roman@62.109.8.139:/home/roman/my_bot
+        roman@62.109.8.139:/home/roman/my_bot_test
       #(a/v/z) (save the rights/more detailed output/compression)
 
 
-    - name: Check data in directory
-      run: ssh roman@62.109.8.139 "ls -la /home/roman/my_bot"
+    - name: Check data and sql dump in directory
+      run: |
+        ssh roman@62.109.8.139 << 'EOF'
+        ls -la /home/roman/my_bot_test
+        ls -la /home/roman/my_bot_test/data
+        EOF
