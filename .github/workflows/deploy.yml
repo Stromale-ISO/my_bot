@@ -52,9 +52,17 @@ jobs:
       run: ssh roman@62.109.8.139 "cat /home/roman/my_bot/.env"
 
 
-    - name: Copy project to server
+    - name: Install services
       run: |
-        rsync -avz --exclude='.git' --exclude='.github' \
+        sudo apt update
+        sudo apt install -y rsync
+
+
+    - name: Copy project to server
+      run: | 
+        rsync -avz \
+        --exclude='.git' --exclude='.github' \
+        ./ \
         roman@62.109.8.139:/home/roman/my_bot
       #(a/v/z) (save the rights/more detailed output/compression)
 
