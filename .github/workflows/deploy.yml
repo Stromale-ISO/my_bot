@@ -33,13 +33,13 @@ jobs:
     - name: Test ssh
       run: ssh roman@62.109.8.139 "echo CONNECTION COMPLETE"
 
-
-    - name: Install services to server
-      run: |
-        ssh roman@62.109.8.139 << 'EOF'
-        sudo apt update
-        sudo apt install -y rsync
-        EOF
+    #install rsync need
+#    - name: Install services to server
+#      run: |
+#        ssh roman@62.109.8.139 << 'EOF'
+#        sudo apt update
+#        sudo apt install -y rsync
+#        EOF
 
 
     - name: Add secrets to test
