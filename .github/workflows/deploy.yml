@@ -1,0 +1,32 @@
+#--------------------
+#--------------------
+#--------------------
+#--------------------
+#--------------------
+
+name: Test and Deploy
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    name: Preparation for the deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+
+    - name: Install SSH
+      uses: webfactory/ssh-agent@0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Add ip
+      run: ssh-keyscan -H 62.109.8.139 >> ~/.ssh/known_hosts
+
+    - name: Test ssh
+      run: ssh roman@62.109.8.139 "echo CONNECTION COMPLETE"
+
