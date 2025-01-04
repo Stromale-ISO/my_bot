@@ -50,3 +50,14 @@ jobs:
 
     - name: Check data
       run: ssh roman@62.109.8.139 "cat /home/roman/my_bot/.env"
+
+
+    - name: Copy project to server
+      run: |
+        rsync -avz --exclude='.git' --exclude='.github' \
+        roman@62.109.8.139:/home/roman/my_bot
+      #(a/v/z) (save the rights/more detailed output/compression)
+
+
+    - name: Check data in directory
+      run: ssh roman@62.109.8.139 "ls -la /home/roman/my_bot"
