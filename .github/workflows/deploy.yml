@@ -74,3 +74,51 @@ jobs:
         ls -la /home/roman/my_bot_test
         ls -la /home/roman/my_bot_test/data
         EOF
+  
+  
+
+  deploy:
+    name: Preparation for the deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+
+      - name: Install SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+      - name: Add ip
+        run: ssh-keyscan -H 62.109.8.139 >> ~/.ssh/known_hosts
+
+
+      - name: Add secrets
+        run: |
+          ssh roman@62.109.8.139 << 'EOF'
+          echo "DB_USER=${{secrets.DB_USER}}" > /home/roman/my_bot/.env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/roman/my_bot/.env  
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/roman/my_bot/.env  
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/roman/my_bot/.env  
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> /home/roman/my_bot/.env  
+          echo "BOT_TOKEN=${{ secrets.BOT_TOKEN }}" >> /home/roman/my_bot/.env  
+          echo "AUTHORIZED_USERS=${{ secrets.AUTHORIZED_USERS }}" >> /home/roman/my_bot/.env  
+          EOF
+          
+
+      - name: Copy project to server
+        run: |
+          rsync -avz \
+          --exclude='.git' --exclude='.github' \
+          ./ \
+          roman@62.109.8.139:/home/roman/my_bot
+
+      - name: Deploy containers
+        run: | 
+          ssh roman@62.109.8.139 << 'EOF'
+          cd /home/roman/my_bot
+          docker compose down
+          docker compose up --build -d
+          EOF
