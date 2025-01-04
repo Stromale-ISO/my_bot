@@ -49,4 +49,4 @@ jobs:
     
 
     - name: Check data
-      run: ssh roman@62.109.8.139 "cat /home/roman/my_bot/.env
+      run: ssh roman@62.109.8.139 "cat /home/roman/my_bot/.env"
