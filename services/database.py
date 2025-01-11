@@ -68,3 +68,15 @@ async def get_all_persons():
     async with pool.acquire() as conn:
         rows = await conn.fetch("SELECT * FROM persons")
         return rows
+
+
+async def get_persons_by_month(month: str):
+    pool = await get_db_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT * FROM persons
+            WHERE EXTRACT(MONTH FROM person_birthdate) = $1
+            """, int(month)
+        )
+        return rows

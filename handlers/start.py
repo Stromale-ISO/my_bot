@@ -10,8 +10,9 @@ async def start_handler(message: Message, *args, **kwargs):
     await message.answer(
         "Привет! Вот что я могу:\n"
         "1. Добавить данные\n"
-        "2. Удалить данные\n"
-        "3. Просмотреть данные",
+        "2. Показать данные\n"
+        "3. Удалить данные\n"
+        "4. Показать дни рождения",
         reply_markup=main_menu()
     )
 

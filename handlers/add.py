@@ -4,6 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from services.database import add_person
 from middlewares.authorization import authorized_only
+from keyboards.reply import main_menu
 
 class UserStates(StatesGroup):
     waiting_for_name = State()
@@ -66,10 +67,10 @@ async def process_description(message: Message, state: FSMContext, *args, **kwar
 
     try:
         await add_person(name, surname, birthdate, description)
-        await message.answer("Данные успешно добавлены в базу.")
+        await message.answer("Данные успешно добавлены в базу.", reply_markup=main_menu())
         await state.clear()
     except Exception as e:
-        await message.answer(f"Ошибка при добавлении данных: {e}")
+        await message.answer(f"Ошибка при добавлении данных: {e}", reply_markup=main_menu())
 
 
 # @authorized_only

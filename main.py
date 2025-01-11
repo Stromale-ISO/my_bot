@@ -5,7 +5,7 @@ from handlers.start import register_start_handlers
 from handlers.add import register_add_handlers
 from handlers.delete import register_delete_handlers
 from handlers.show import register_show_handlers
-
+from handlers.month_find import register_birthday_handlers
 
 async def main():
     print("Бот запущен!")
@@ -15,6 +15,7 @@ async def main():
     register_add_handlers(dp)
     register_delete_handlers(dp)
     register_show_handlers(dp)
+    register_birthday_handlers(dp)
 
     await dp.start_polling(bot)
 
