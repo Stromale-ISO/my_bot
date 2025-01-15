@@ -16,7 +16,7 @@ async def main():
     register_add_handlers(dp)
     register_delete_handlers(dp)
     register_show_handlers(dp)
-    register_birthday_handlers(dp) 
+    register_birthday_handlers(dp)
     register_update_description_handlers(dp)
 
     await dp.start_polling(bot)
