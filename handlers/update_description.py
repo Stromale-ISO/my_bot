@@ -35,7 +35,7 @@ async def process_id(message: Message, state: FSMContext, *args, **kwargs):
 
 
     if not await check_person_exists(person_id):
-        await message.answer(f"Запись с ID {person_id} не найдена. Попробуйте снова.")
+        await message.answer(f"Запись с ID {person_id} не найдена. Попробуйте снова или введите 'Отмена'")
         return
 
     await state.update_data(person_id=person_id)
