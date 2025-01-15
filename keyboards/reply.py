@@ -5,7 +5,8 @@ def main_menu():
         [KeyboardButton(text="Добавить данные")],
         [KeyboardButton(text="Показать данные")],
         [KeyboardButton(text="Удалить данные")],
-        [KeyboardButton(text="Показать дни рождения")]
+        [KeyboardButton(text="Показать дни рождения")],
+        [KeyboardButton(text="Изменить описание")]
     ], resize_keyboard=True)
 
 def month_keyboard():

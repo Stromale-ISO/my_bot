@@ -14,7 +14,7 @@ class UpdateDescriptionStates(StatesGroup):
 
 @authorized_only
 async def update_description_handler(message: Message, state: FSMContext, *args, **kwargs):
-    await message.answer("Введите ID пользователя, для которого нужно обновить описание:", reply_markup=None)
+    await message.answer("Введите ID пользователя, для которого нужно обновить описание. Если вы передумали введите 'Отмена'.", reply_markup=None)
     await state.set_state(UpdateDescriptionStates.waiting_for_id)
 
 
@@ -28,7 +28,7 @@ async def process_id(message: Message, state: FSMContext, *args, **kwargs):
         return
 
     if not person_id.isdigit():
-        await message.answer("ID должен быть числом. Попробуйте снова.")
+        await message.answer("ID должен быть числом. Попробуйте снова или введите 'Отмена'")
         return
 
     person_id = int(person_id)
