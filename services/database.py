@@ -80,3 +80,21 @@ async def get_persons_by_month(month: str):
             """, int(month)
         )
         return rows
+
+
+async def update_description(person_id: int, new_description: str):
+    pool = await get_db_pool()
+    async with pool.acquire() as conn:
+        result = await conn.execute(
+            "UPDATE persons SET person_description = $1 WHERE person_id = $2",
+            new_description, person_id
+        )
+        if result == "UPDATE 0":
+            raise ValueError("Запись с таким ID не найдена.")
+
+
+async def check_person_exists(person_id: int) -> bool:
+    pool = await get_db_pool()
+    async with pool.acquire() as conn:
+        result = await conn.fetchval("SELECT COUNT(*) FROM persons WHERE person_id = $1", person_id)
+        return result > 0
