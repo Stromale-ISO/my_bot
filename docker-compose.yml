@@ -25,7 +25,4 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - /home/roman/my_bot/data/telegram_bot_dump.sql:/docker-entrypoint-initdb.d/telegram_bot_dump.sql
-volumes:
-  postgres_data:
+      - /home/roman/my_bot/db_data:/var/lib/postgresql/data
