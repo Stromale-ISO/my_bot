@@ -121,7 +121,7 @@ jobs:
         run: | 
           ssh roman@62.109.8.139 << 'EOF'
           cd /home/roman/my_bot
-          docker image prune-f
+          docker image prune -f
           docker compose build
           docker compose up -d
           EOF
