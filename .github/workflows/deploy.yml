@@ -116,10 +116,12 @@ jobs:
           ./ \
           roman@62.109.8.139:/home/roman/my_bot
 
+
       - name: Deploy containers
         run: | 
           ssh roman@62.109.8.139 << 'EOF'
           cd /home/roman/my_bot
-          docker compose down
-          docker compose up --build -d
+          docker image prune-f
+          docker compose build
+          docker compose up -d
           EOF
