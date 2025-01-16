@@ -9,7 +9,7 @@ from handlers.month_find import register_birthday_handlers
 from handlers.update_description import register_update_description_handlers
 
 async def main():
-    print("Бот запущен!")
+    print("Бот запущен!!!")
     await create_db_pool()
 
     register_start_handlers(dp)
