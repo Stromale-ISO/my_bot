@@ -91,7 +91,7 @@ async def update_description(person_id: int, new_description: str):
             new_description, person_id
         )
         if result == "UPDATE 0":
-            raise ValueError("Запись с таким ID не найдена.")
+            raise ValueError("Запись с таким ID не найдена. Пошел отсюда.")
         await conn.execute("CLUSTER persons USING persons_pkey")
 
 async def check_person_exists(person_id: int) -> bool:
