@@ -8,7 +8,7 @@ async def show_handler(message: Message, *args, **kwargs):
     try:
         rows = await get_all_persons()
         if rows:
-            response = "Информация в базе данных:\n\n"
+            response = "Записи в базе данных:\n\n"
             for row in rows:
                 response += (
                     f"ID: {row['person_id']}, "
