@@ -66,7 +66,7 @@ async def delete_person(person_id):
 async def get_all_persons():
     pool = await get_db_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch("SELECT * FROM persons ORDER BY person_id")
+        rows = await conn.fetch("SELECT * FROM persons ORDER BY person_id ASC")
         print(rows)
         return rows
 
