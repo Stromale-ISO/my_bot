@@ -67,6 +67,7 @@ async def get_all_persons():
     pool = await get_db_pool()
     async with pool.acquire() as conn:
         rows = await conn.fetch("SELECT * FROM persons ORDER BY person_id")
+        print(rows)
         return rows
 
 
