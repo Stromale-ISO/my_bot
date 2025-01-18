@@ -66,7 +66,7 @@ async def delete_person(person_id):
 async def get_all_persons():
     pool = await get_db_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch("SELECT * FROM pups")
+        rows = await conn.fetch("SELECT * FROM persons ORDER BY person_id")
         print(rows)
         return rows
 
@@ -92,7 +92,7 @@ async def update_description(person_id: int, new_description: str):
         )
         if result == "UPDATE 0":
             raise ValueError("Запись с таким ID не найдена.")
-        await conn.execute("CLUSTER persons USING persons_pkey")
+        
 
 async def check_person_exists(person_id: int) -> bool:
     pool = await get_db_pool()
