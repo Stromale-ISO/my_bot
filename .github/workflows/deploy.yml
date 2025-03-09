@@ -122,10 +122,16 @@ jobs:
         run: | 
           ssh roman@62.109.8.139 << 'EOF'
           cd /home/roman/my_bot
-          
           docker compose down
-          docker compose build --no-cache
-          docker compose up -d
-          docker image prune -f
+          docker system prune -a -f  # Полностью очищает кеш, контейнеры и образы
+          docker volume prune -f  # Удаляет старые volume (если есть)
+               
+          docker compose build --no-cache  # Пересобираем все с нуля
+          docker compose up -d  # Запускаем в фоне
+#          docker compose down
+#          docker compose build --no-cache
+#          docker compose up -d
+#          docker image prune -f
+
           EOF
           
