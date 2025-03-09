@@ -53,7 +53,7 @@ async def show_handler(message: Message, *args, **kwargs):
             await message.answer(part)
 
     except Exception as e:
-        await message.answer(f"Произошла ошибка: {e}")
+        await message.answer(f"Произошла ошибка бля: {e}")
 
 
 def register_show_handlers(dp: Dispatcher):
