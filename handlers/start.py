@@ -8,7 +8,7 @@ from middlewares.authorization import authorized_only
 @authorized_only
 async def start_handler(message: Message, *args, **kwargs):
     await message.answer(
-        "Привет! Вот что я могу:\n"
+        "Здарова! Вот что я могу:\n"
         "1. Добавить данные\n"
         "2. Показать данные\n"
         "3. Удалить данные\n"
