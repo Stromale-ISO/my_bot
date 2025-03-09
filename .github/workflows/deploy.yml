@@ -116,18 +116,22 @@ jobs:
           ./ \
           roman@62.109.8.139:/home/roman/my_bot
 
-#пересобирает образ еслиесть изменения
-#запускает контейнеры в фоновом режиме и обновляет их если конф изменилась
+#Полностью очищает кеш, контейнеры и образы
+# Удаляет старые volume (если есть)
+# Пересобираем все с нуля
+#Запускаем в фоне
       - name: Deploy containers
         run: | 
           ssh roman@62.109.8.139 << 'EOF'
           cd /home/roman/my_bot
           docker compose down
-          docker system prune -a -f  # Полностью очищает кеш, контейнеры и образы
-          docker volume prune -f  # Удаляет старые volume (если есть)
+          docker system prune -a -f  
+          docker volume prune -f 
                
-          docker compose build --no-cache  # Пересобираем все с нуля
-          docker compose up -d  # Запускаем в фоне
+          docker compose build --no-cache  
+          docker compose up -d
+#пересобирает образ еслиесть изменения
+#запускает контейнеры в фоновом режиме и обновляет их если конф изменилась
 #          docker compose down
 #          docker compose build --no-cache
 #          docker compose up -d
