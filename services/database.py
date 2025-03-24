@@ -78,6 +78,7 @@ async def get_persons_by_month(month: str):
             """
             SELECT * FROM persons
             WHERE EXTRACT(MONTH FROM person_birthdate) = $1
+            ORDER BY person_birthdate
             """, int(month)
         )
         return rows
